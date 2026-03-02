@@ -9,7 +9,7 @@ import json
 
 load_dotenv()
 app = FastAPI()
-client = OpenAI(api_key=getenv("OPENROUTER_API_KEY"), base_url="https://openrouter.ai/api/v1")
+client = OpenAI(api_key=getenv("OPENROUTER_API_KEY", ""), base_url="https://openrouter.ai/api/v1")
 MODEL_ID = "stepfun/step-3.5-flash:free"
 
 
@@ -48,6 +48,7 @@ def build_glossary_llm(text: str, n_terms: int = 15) -> list[dict]:
         messages=[dict(role="user", content=prompt)],
         temperature=0.2, )
     content = response.choices[0].message.content
+
     try:
         data = json.loads(content)
     except json.JSONDecodeError:
